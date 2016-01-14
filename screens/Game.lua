@@ -1127,7 +1127,7 @@ function scene:AdjustScroller()
     end
     
     scrollView:setScrollWidth(GLOB.cardWidth * #hand)
-    scrollView:scrollTo("right", {time=1200})
+    scrollView:scrollTo("right", {time=600})
 end
 
 function scene:ComputerDiscard(cpuField, whoString, currentHand, totalDrawn)
@@ -1645,7 +1645,49 @@ function scene:create( event )
     overlay:toBack()
     logScroll = controls:MakeLogScroll(mainGroup, GLOB.logScrollWidth)
     scrollView = controls:MakeScrollView(mainGroup)  
-    controls:MakeArrows(mainGroup, scrollView)
+    
+    local rightScroll = function ()
+        local newX, newY = scrollView:getContentPosition();
+        newX = newX - GLOB.cardWidth;
+                
+        print(newX)
+        print(scrollView.width)
+        
+        if newX >= (#hand - 5) * GLOB.cardWidth * -1 then--< GLOB.cardWidth * 2 then
+            scrollView:scrollToPosition{ x = newX; y = newY; }
+        else
+            scrollView:scrollTo("right", {time=300})
+        end
+    end
+    
+    local leftScroll = function ()
+        local newX, newY = scrollView:getContentPosition();
+        newX = newX + GLOB.cardWidth;
+        
+        print(newX)
+        if newX < GLOB.cardWidth / 2 then
+            scrollView:scrollToPosition{ x = newX; y = newY; }
+        else
+            scrollView:scrollTo("left", {time=300})
+            --scrollView:scrollToPosition{ x = GLOB.cardWidth; y = newY; }
+        end
+    end   
+    
+    local left_arrow = display.newRect(25, 580, 16, 57);
+    left_arrow:addEventListener("tap" , leftScroll)
+    left_arrow.fill = { type = "image", filename = "images/arrow.png"} 
+    local right_arrow = display.newRect(GLOB.cardWidth * 5 + 75, 580, 16, 57);
+    right_arrow:addEventListener("tap" , rightScroll)    
+    right_arrow.fill = {type = "image",filename = "images/arrow.png"} 
+    right_arrow.rotation = 180
+
+    mainGroup:insert(left_arrow)
+    mainGroup:insert(right_arrow)  
+    
+    --controls:MakeArrows(mainGroup, scrollView)
+    
+ 
+    
     scoreIconsOn = controls:ScoreIconsOn(mainGroup)
     scoreIconsOff = controls:ScoreIconsOff(mainGroup)
     cpuScoreIconsOn = controls:ScoreIconsOn(oppGroup)

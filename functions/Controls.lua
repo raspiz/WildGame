@@ -134,31 +134,6 @@ function controls:MakeScrollView(myGroup)
     return element
 end
 
-function controls:MakeArrows(myGroup, scroller)
-    local rightScroll = function ()
-        local newX, newY = scroller:getContentPosition();
-        newX = newX - GLOB.cardWidth;
-        scroller:scrollToPosition{ x = newX; y = newY; }
-    end
-    
-    local leftScroll = function ()
-        local newX, newY = scroller:getContentPosition();
-        newX = newX + GLOB.cardWidth;
-        scroller:scrollToPosition{ x = newX; y = newY; }
-    end    
-    
-    local left_arrow = display.newRect(25, 580, 16, 57);
-    left_arrow:addEventListener("tap" , leftScroll)
-    left_arrow.fill = { type = "image", filename = "images/arrow.png"} 
-    local right_arrow = display.newRect(GLOB.cardWidth * 5 + 75, 580, 16, 57);
-    right_arrow:addEventListener("tap" , rightScroll)    
-    right_arrow.fill = {type = "image",filename = "images/arrow.png"} 
-    right_arrow.rotation = 180
-
-    myGroup:insert(left_arrow)
-    myGroup:insert(right_arrow)  
-end
-
 function controls:CardBack(myGroup)
     -- show the back of the card for the draw pile
     local element = display.newRect( GLOB.drawPileXLoc, GLOB.drawPileYLoc, GLOB.cardWidth, GLOB.cardHeight )
